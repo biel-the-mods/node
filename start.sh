@@ -3,6 +3,7 @@ set -euo pipefail
 
 NGROK_AUTHTOKEN="${NGROK_AUTHTOKEN:-}"
 PORT="${PORT:-4096}"
+NGROK_DOMAIN="${NGROK_DOMAIN:-current-bunny-presently.ngrok-free.app}"
 
 if [ -z "$NGROK_AUTHTOKEN" ]; then
   printf '\033[1;31m[erro]\033[0m NGROK_AUTHTOKEN não definido.\n' >&2
@@ -15,6 +16,7 @@ if [ -z "$NGROK_AUTHTOKEN" ]; then
   exit 1
 fi
 URL_FILE="$HOME/.opencode-web-url"
+EXPECTED_URL="https://${NGROK_DOMAIN}"
 
 C_INFO='\033[1;36m'; C_OK='\033[1;32m'; C_WARN='\033[1;33m'; C_ERR='\033[1;31m'; C_RST='\033[0m'
 log()  { printf "${C_INFO}[start]${C_RST} %s\n" "$*"; }
@@ -87,8 +89,8 @@ start_web() {
 }
 
 start_ngrok() {
-  log "subindo túnel ngrok para porta $PORT..."
-  nohup ngrok http "$PORT" --log=/tmp/ngrok.log \
+  log "subindo túnel ngrok para porta $PORT com domínio fixo $NGROK_DOMAIN..."
+  nohup ngrok http "$PORT" --url="$NGROK_DOMAIN" --log=/tmp/ngrok.log \
     >/tmp/ngrok.out 2>&1 </dev/null &
   NGROK_PID=$!
   local url=""
@@ -105,6 +107,11 @@ start_ngrok() {
   echo "$url" > "$URL_FILE"
   ok "ngrok pronto (pid $NGROK_PID) → $url"
   PUBLIC_URL="$url"
+  # valida que bate com o domínio reservado
+  if [[ "$PUBLIC_URL" != *"$NGROK_DOMAIN"* ]]; then
+    warn "URL ativa ($PUBLIC_URL) não confere com domínio reservado ($NGROK_DOMAIN)"
+    warn "verifique se o domínio está reservado na sua conta ngrok"
+  fi
 }
 
 # === instalação ===
