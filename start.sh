@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-NGROK_AUTHTOKEN="${NGROK_AUTHTOKEN:-REDACTED}"
+NGROK_AUTHTOKEN="${NGROK_AUTHTOKEN:-}"
 PORT="${PORT:-4096}"
+
+if [ -z "$NGROK_AUTHTOKEN" ]; then
+  printf '\033[1;31m[erro]\033[0m NGROK_AUTHTOKEN não definido.\n' >&2
+  echo "Defina como Codespace Secret (recomendado):" >&2
+  echo "  https://github.com/settings/codespaces → New secret" >&2
+  echo "  nome: NGROK_AUTHTOKEN" >&2
+  echo "  repo: biel-the-mods/node" >&2
+  echo "Ou exporte na sessão:" >&2
+  echo "  export NGROK_AUTHTOKEN='seu-token'" >&2
+  exit 1
+fi
 URL_FILE="$HOME/.opencode-web-url"
 
 C_INFO='\033[1;36m'; C_OK='\033[1;32m'; C_WARN='\033[1;33m'; C_ERR='\033[1;31m'; C_RST='\033[0m'
