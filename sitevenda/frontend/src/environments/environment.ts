@@ -2,8 +2,8 @@ export const environment = {
   production: false,
   apiBaseUrl: 'http://localhost:3000',
   supabase: {
-    url: 'http://localhost:54321',
-    anonKey: 'coloque-sua-anon-key-publica-aqui',
+    url: 'https://twjazqwlzlqyjgbtmgyu.supabase.co',
+    anonKey: 'sb_publishable_gILYs0qC8pPf8GYlGRohaA_Kas1own0',
   },
   pix: {
     pollIntervalMs: 3000,

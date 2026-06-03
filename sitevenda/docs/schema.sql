@@ -6,6 +6,17 @@
 -- Extensões
 create extension if not exists "uuid-ossp";
 
+-- ================ FUNÇÕES ================
+
+-- Atualiza automaticamente o campo atualizado_em
+create or replace function public.handle_updated_at()
+returns trigger as $$
+begin
+  new.atualizado_em = now();
+  return new;
+end;
+$$ language plpgsql;
+
 -- ================ TABELAS ================
 
 create table if not exists public.categorias (
@@ -60,13 +71,17 @@ create table if not exists public.pedidos (
 create index if not exists pedidos_status_idx
   on public.pedidos (status);
 
--- ================ BUCKET ================
+-- ================ TRIGGERS ================
 
--- Crie manualmente no painel: Storage → New bucket
--- Nome: artstore-bucket
--- Public: SIM
+create trigger set_updated_at
+  before update on public.produtos
+  for each row execute function public.handle_updated_at();
 
--- ================ RLS (exemplo) ================
+create trigger set_updated_at
+  before update on public.pedidos
+  for each row execute function public.handle_updated_at();
+
+-- ================ RLS ================
 
 alter table public.produtos    enable row level security;
 alter table public.categorias  enable row level security;
@@ -87,3 +102,13 @@ create policy "cupons_public_read" on public.cupons
 
 -- Sem políticas de escrita para anon.
 -- O backend usa a service_role_key para tudo (admin, pix, uploads).
+
+-- ================ STORAGE ================
+
+-- Crie manualmente no painel: Storage → New bucket
+-- Nome: artstore-bucket
+-- Public: SIM
+-- Policies:
+--   Allow public read: bucket_id = 'artstore-bucket' AND operation = 'SELECT'
+--   Allow authenticated insert: bucket_id = 'artstore-bucket' AND operation = 'INSERT'
+--   Allow authenticated delete: bucket_id = 'artstore-bucket' AND operation = 'DELETE'
