@@ -4,7 +4,10 @@
     "composio": {
       "type": "remote",
       "url": "https://connect.composio.dev/mcp",
-      "enabled": true
+      "enabled": true,
+      "oauth": {
+        "callbackPort": 19876
+      }
     }
   }
 }
