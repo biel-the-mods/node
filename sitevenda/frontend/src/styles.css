@@ -1,0 +1,116 @@
+/* =========================================
+ *  Elfas Design — Global Stylesheet
+ *  Stack: Tailwind CSS + custom layer
+ * ========================================= */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-charcoal-950 text-amber-100;
+    background-image: radial-gradient(
+        circle at 20% 0%,
+        rgba(245, 158, 11, 0.08) 0%,
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 80% 100%,
+        rgba(245, 158, 11, 0.05) 0%,
+        transparent 40%
+      );
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    @apply bg-amber-500/30 text-amber-50;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-charcoal-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-amber-500/40 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-amber-500/70;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-charcoal-900/60 backdrop-blur-md
+      border border-amber-500/20
+      rounded-2xl;
+  }
+
+  .glass-strong {
+    @apply bg-charcoal-900/80 backdrop-blur-lg
+      border border-amber-500/30
+      rounded-2xl shadow-glow;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center
+      px-6 py-3
+      bg-amber-500 hover:bg-amber-400
+      text-charcoal-950 font-semibold uppercase
+      tracking-wider text-sm
+      rounded-xl
+      transition-all duration-200
+      shadow-glow hover:shadow-ring
+      disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center
+      px-6 py-3
+      bg-transparent hover:bg-amber-500/10
+      text-amber-400 hover:text-amber-300
+      border border-amber-500/30 hover:border-amber-500/60
+      font-semibold uppercase tracking-wider text-sm
+      rounded-xl transition-all duration-200;
+  }
+
+  .input-base {
+    @apply w-full px-4 py-3
+      bg-charcoal-900/70
+      border border-amber-500/20
+      focus:border-amber-500/60
+      focus:outline-none focus:ring-2 focus:ring-amber-500/30
+      text-amber-100 placeholder:text-amber-100/30
+      rounded-xl transition-all duration-200;
+  }
+
+  .label-base {
+    @apply block mb-2
+      text-xs font-semibold uppercase tracking-widest
+      text-amber-400/80;
+  }
+
+  .heading-display {
+    @apply font-display font-extrabold uppercase
+      tracking-tight text-amber-50;
+  }
+
+  .badge-amber {
+    @apply inline-flex items-center px-3 py-1
+      bg-amber-500/15 text-amber-400
+      border border-amber-500/30
+      text-xs font-semibold uppercase tracking-widest
+      rounded-full;
+  }
+}
